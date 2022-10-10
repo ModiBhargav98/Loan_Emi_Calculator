@@ -23,7 +23,7 @@ export default function Login() {
     const value = e.target.value;
     const errors = userDetail.errorMsg;
     var validEmail = ["gmail.com", "yahoo.com"];
-    var password =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
+    var password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
     switch (name) {
       case "email":
         setUserDetail({ ...userDetail, email: value });
@@ -35,7 +35,7 @@ export default function Login() {
         }
         break;
       case "password":
-        console.log(value)
+        console.log(value);
         setUserDetail({ ...userDetail, password: value });
         if (value.match(password)) {
           errors.password = "";
@@ -59,36 +59,36 @@ export default function Login() {
         verify = false;
         error[value] = "Required field";
       }
-      if(userdata.errorMsg[value] !== ""){
+      if (userdata.errorMsg[value] !== "") {
         verify = false;
-        setMessage({status:false,msg:"please resolve your active error"})
-        setConfirmBox(true)
-        setTimeout(() => setConfirmBox(false))
+        setMessage({ status: false, msg: "please resolve your active error" });
+        setConfirmBox(true);
+        setTimeout(() => setConfirmBox(false));
       }
     }
     setUserDetail({ ...userDetail, errorMsg: error });
-    return verify
-  }
+    return verify;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(verifyDetails(userDetail))
-    if(verifyDetails(userDetail)){
+    console.log(verifyDetails(userDetail));
+    if (verifyDetails(userDetail)) {
       LoanServices.LoginUser(userDetail)
-      .then((res) => {
-        if (res.data.success) {
-          console.log(res.data);
-          navigate("/emicalculator");
-          localStorage.setItem("Id", res.data.user._id);
-        } else {
-          setMessage({ status: false, msg: res.data.msg });
-          setConfirmBox(true);
-          setTimeout(() => setConfirmBox(false), 5000);
-        }
-      })
-      .catch((ex) => console.log(ex));
+        .then((res) => {
+          if (res.data.success) {
+            console.log(res.data);
+            navigate("/emicalculator");
+            localStorage.setItem("token", res.data.token);
+          } else {
+            setMessage({ status: false, msg: res.data.msg });
+            setConfirmBox(true);
+            setTimeout(() => setConfirmBox(false), 5000);
+          }
+        })
+        .catch((ex) => console.log(ex));
     }
- };
+  };
   return (
     <div className="container w-100 d-flex justify-content-center">
       <div className="border border-dark py-3 my-5 w-50">

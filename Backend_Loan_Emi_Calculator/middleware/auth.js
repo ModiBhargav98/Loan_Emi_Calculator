@@ -1,13 +1,13 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/config")
+const config = require("../config/config");
 
 const verifyToken = (req, res, next) => {
-  const token1 = req.headers["token"];
+  const token1 = req.headers["authorization"];
   jwt.verify(
     token1,
     config.secretKey,
     {
-      algorithm:config.algorithm,
+      algorithm: config.algorithm,
     },
     (err, decoded) => {
       if (err) {

@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import LoanServices from "../services/LoanServices";
+import jwt_deode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 export default function EmiCalculator() {
   const emicalculator = {
@@ -23,7 +25,10 @@ export default function EmiCalculator() {
   const [calculateEmi, setCalculateEmi] = useState(finalEmi);
   const [confirmation, setConfirmation] = useState(false);
   const [userEmiHistory, setUserEmiHistory] = useState([]);
-  const userId = localStorage.getItem("Id");
+  const token = localStorage.getItem("token");
+  console.log(token);
+  const userId = jwt_deode(token);
+  const navigate = useNavigate();
 
   const finalEmiCount = (ruppes, interest, months) => {
     const amount = ruppes;
@@ -96,13 +101,17 @@ export default function EmiCalculator() {
   }, [userEmiHistory]);
 
   useEffect(() => {
-    LoanServices.getEmiDetails(userId)
-      .then((res) => {
-        if (res.data.success) {
-          setUserEmiHistory(res.data.msg.emiHistory);
-        }
-      })
-      .catch((ex) => console.log(ex));
+    if (token) {
+      LoanServices.getEmiDetails(userId.user._id, token)
+        .then((res) => {
+          if (res.data.success) {
+            setUserEmiHistory(res.data.msg.emiHistory);
+          }
+        })
+        .catch((ex) => console.log(ex));
+    } else {
+      navigate("/");
+    }
   }, [confirmation]);
 
   const formValidation = (emiData) => {
@@ -136,13 +145,15 @@ export default function EmiCalculator() {
     e.preventDefault();
     if (formValidation(loanEmi)) {
       finalEmiCount(loanEmi.amount, loanEmi.rate, loanEmi.months);
-      LoanServices.AddEmiDetails(userId, loanEmi)
+      LoanServices.AddEmiDetails(userId.user._id, loanEmi, token)
         .then((res) => {
           if (res.data.success) {
             setUserEmiHistory(res.data.msg.emiHistory);
           }
         })
         .catch((ex) => console.log(ex));
+    } else {
+      finalEmiCount(loanEmi.amount, loanEmi.rate, loanEmi.months);
     }
   };
 
