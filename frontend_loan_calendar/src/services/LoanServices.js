@@ -5,6 +5,9 @@ class LoanServices {
   LoginUser(Detail) {
     return axios.post(LOAN_API_URL + "/user-login", Detail);
   }
+  CreateUser(Detail) {
+    return axios.post(LOAN_API_URL + "/create-user", Detail);
+  }
   AddEmiDetails(userId, data, token) {
     return axios.put(LOAN_API_URL + "/loan-emi/" + userId, data, {
       headers: {

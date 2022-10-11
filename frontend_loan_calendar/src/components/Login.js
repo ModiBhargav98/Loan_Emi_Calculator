@@ -6,9 +6,11 @@ import LoanServices from "../services/LoanServices";
 export default function Login() {
   const navigate = useNavigate();
   const userInfo = {
+    name: "",
     email: "",
     password: "",
     errorMsg: {
+      name: "",
       email: "",
       password: "",
     },
@@ -16,6 +18,7 @@ export default function Login() {
   const [userDetail, setUserDetail] = useState(userInfo);
   const [message, setMessage] = useState({ status: false, msg: "" });
   const [confirmBox, setConfirmBox] = useState(false);
+  const [formStatus, setFormStatus] = useState(false);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -25,6 +28,14 @@ export default function Login() {
     var validEmail = ["gmail.com", "yahoo.com"];
     var password = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$/;
     switch (name) {
+      case "name":
+        setUserDetail({...userDetail,name:value})
+        if(value.length > 3 && value.length < 40){
+          errors.name = ""
+        }else{
+          errors.name = "username length should be required minimum 3 and maximum 20"
+        }
+        break
       case "email":
         setUserDetail({ ...userDetail, email: value });
         const emailValue = value.split("@")[1];
@@ -35,7 +46,6 @@ export default function Login() {
         }
         break;
       case "password":
-        console.log(value);
         setUserDetail({ ...userDetail, password: value });
         if (value.match(password)) {
           errors.password = "";
@@ -54,16 +64,16 @@ export default function Login() {
     const keys = Object.keys(userdata.errorMsg);
     let verify = true;
     for (const value of keys) {
-      console.log(userdata[value]);
       if (userdata[value] === "") {
         verify = false;
         error[value] = "Required field";
       }
       if (userdata.errorMsg[value] !== "") {
         verify = false;
+        error[value] = userdata.errorMsg[value]
         setMessage({ status: false, msg: "please resolve your active error" });
         setConfirmBox(true);
-        setTimeout(() => setConfirmBox(false));
+        setTimeout(() => setConfirmBox(false),5000);
       }
     }
     setUserDetail({ ...userDetail, errorMsg: error });
@@ -72,27 +82,49 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(verifyDetails(userDetail));
-    if (verifyDetails(userDetail)) {
-      LoanServices.LoginUser(userDetail)
-        .then((res) => {
-          if (res.data.success) {
-            console.log(res.data);
-            navigate("/emicalculator");
-            localStorage.setItem("token", res.data.token);
-          } else {
-            setMessage({ status: false, msg: res.data.msg });
-            setConfirmBox(true);
-            setTimeout(() => setConfirmBox(false), 5000);
-          }
-        })
-        .catch((ex) => console.log(ex));
+    if(formStatus === false){
+      const loginUser = {
+        email:userDetail.email,
+        password:userDetail.password,
+        errorMsg:userDetail.errorMsg
+      }
+      if (verifyDetails(loginUser)) {
+        LoanServices.LoginUser(loginUser)
+          .then((res) => {
+            if (res.data.success) {
+              navigate("/emicalculator");
+              localStorage.setItem("token", res.data.token);
+            } else {
+              setMessage({ status: false, msg: res.data.msg });
+              setConfirmBox(true);
+              setTimeout(() => setConfirmBox(false), 5000);
+            }
+          })
+          .catch((ex) => console.log(ex));
+      }
+    }else{
+      if (verifyDetails(userDetail)) {
+        LoanServices.CreateUser(userDetail)
+          .then((res) => {
+            if (res.data.success) {
+              setFormStatus(false)
+              setUserDetail({...userDetail,email:res.data.msg.email,password:res.data.msg.password})
+            } else {
+              setMessage({ status: false, msg: res.data.msg });
+              setFormStatus(true)
+              setConfirmBox(true);
+              setTimeout(() => setConfirmBox(false), 5000);
+            }
+          })
+          .catch((ex) => console.log(ex));
+      }
     }
+    
   };
   return (
     <div className="container w-100 d-flex justify-content-center">
       <div className="border border-dark py-3 my-5 w-50">
-        <div className="text-center text-primary fs-3 my-2">Login User</div>
+        <div className="text-center text-primary fs-3 my-2">{formStatus === false ? "Login user" : "Create a account"}</div>
         {confirmBox && (
           <div
             className={
@@ -106,6 +138,28 @@ export default function Login() {
           </div>
         )}
         <form onSubmit={handleSubmit} className="mx-auto w-75">
+          {formStatus === true && (
+            <div className="mb-3">
+              <label htmlFor="exampleInputname1">Name</label>
+              <input
+                type="text"
+                className="form-control"
+                name="name"
+                value={userDetail.name}
+                // onChange={(e) =>
+                //   setUserDetail({ ...userDetail, email: e.target.value })
+                // }
+                onChange={handleChange}
+                id="exampleInputname1"
+                required
+              />
+              {userDetail && userDetail.errorMsg?.name !== "" && (
+                <small className="text-danger my-2">
+                  {userDetail.errorMsg.name}
+                </small>
+              )}
+            </div>
+          )}
           <div className="mb-3">
             <label htmlFor="exampleInputEmail1">Email address</label>
             <input
@@ -151,6 +205,8 @@ export default function Login() {
               Submit
             </button>
           </div>
+          <div className="text-end text-primary" onClick={() => setFormStatus(!formStatus)}>
+             {formStatus === false ? "Create Account" : "Login Here"}</div>
         </form>
       </div>
     </div>

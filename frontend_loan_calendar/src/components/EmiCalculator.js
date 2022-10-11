@@ -25,8 +25,9 @@ export default function EmiCalculator() {
   const [calculateEmi, setCalculateEmi] = useState(finalEmi);
   const [confirmation, setConfirmation] = useState(false);
   const [userEmiHistory, setUserEmiHistory] = useState([]);
+  const [message, setMessage] = useState({ status: false, msg: "" });
+  const [confirmBox, setConfirmBox] = useState(false);
   const token = localStorage.getItem("token");
-  console.log(token);
   const userId = jwt_deode(token);
   const navigate = useNavigate();
 
@@ -48,6 +49,41 @@ export default function EmiCalculator() {
       payment: Math.round(totalPayment),
     });
     setConfirmation(true);
+  };
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    const name = e.target.name;
+    const value = e.target.value;
+    const errors = loanEmi.errors;
+    switch (name) {
+      case "amount":
+        setLoanEmi({ ...loanEmi, amount: parseInt(value) });
+        if (parseInt(value) >= 10000 && parseInt(value) <= 20000000) {
+          errors.amount = "";
+        } else {
+          errors.amount = "loan start amount 10000 to 2 crore";
+        }
+        break;
+      case "rate":
+        setLoanEmi({ ...loanEmi, rate: parseInt(value) });
+        if (parseInt(value) >= 5 && parseInt(value) <= 20) {
+          errors.rate = "";
+        } else {
+          errors.rate = "loan interest minimum 5% and maximum 20%";
+        }
+        break;
+      case "months":
+        setLoanEmi({ ...loanEmi, months: parseInt(value) });
+        if (parseInt(value) >= 3 && parseInt(value) <= 120) {
+          errors.months = "";
+        } else {
+          errors.months = "loan period minimum 3 and maximum 120 months";
+        }
+        break;
+      default:
+        break;
+    }
   };
 
   const userEmiList = useMemo(() => {
@@ -119,13 +155,16 @@ export default function EmiCalculator() {
     const keys = Object.keys(emiData.errors);
     let verify = true;
     for (const value of keys) {
-      console.log(emiData[value]);
       if (emiData[value] === "") {
         verify = false;
         error[value] = "Required field";
       }
-      setLoanEmi({ ...loanEmi, errors: error });
+      if (emiData.errors[value].length > 0) {
+        verify = false;
+        error[value] = emiData.errors[value];
+      }
     }
+    setLoanEmi({ ...loanEmi, errors: error });
     if (userEmiHistory?.length > 0) {
       userEmiHistory.forEach((item) => {
         if (
@@ -138,7 +177,6 @@ export default function EmiCalculator() {
       });
     }
     return verify;
-    // console.log(calculateEmi,verify);
   };
 
   const handleEmiCalculator = (e) => {
@@ -153,7 +191,9 @@ export default function EmiCalculator() {
         })
         .catch((ex) => console.log(ex));
     } else {
-      finalEmiCount(loanEmi.amount, loanEmi.rate, loanEmi.months);
+      setConfirmBox(true);
+      setMessage({ status: false, msg: "please resolve your active error" });
+      setTimeout(() => setConfirmBox(false),5000);
     }
   };
 
@@ -162,6 +202,18 @@ export default function EmiCalculator() {
       <div className="row">
         <div className="col-md-6">
           <h2 className="text-centar text-primary">Loan Emi Calculator</h2>
+          {confirmBox && (
+            <div
+              className={
+                message.status
+                  ? "alert alert-success mx-4"
+                  : "alert alert-danger mx-4"
+              }
+              role="alert"
+            >
+              {message.msg}
+            </div>
+          )}
           <form>
             <div className="mb-3">
               <label htmlFor="exampleInputEmail1">
@@ -171,9 +223,13 @@ export default function EmiCalculator() {
                 type="number"
                 className="form-control"
                 value={loanEmi.amount}
-                onChange={(e) =>
-                  setLoanEmi({ ...loanEmi, amount: parseInt(e.target.value) })
-                }
+                name="amount"
+                // onChange={(e) =>
+                //   {
+                //     setLoanEmi({ ...loanEmi, amount: parseInt(e.target.value) })
+                //   }
+                // }
+                onChange={handleChange}
                 id="exampleInputEmail1"
                 required
               />
@@ -191,15 +247,17 @@ export default function EmiCalculator() {
                 type="number"
                 className="form-control"
                 value={loanEmi.rate}
-                onChange={(e) =>
-                  setLoanEmi({ ...loanEmi, rate: parseFloat(e.target.value) })
-                }
+                name="rate"
+                // onChange={(e) =>
+                //   setLoanEmi({ ...loanEmi, rate: parseFloat(e.target.value) })
+                // }
+                onChange={handleChange}
                 id="exampleInputPassword1"
                 required
               />
-              {loanEmi && loanEmi.errors?.amount !== "" && (
+              {loanEmi && loanEmi.errors?.rate !== "" && (
                 <small className="text-danger my-2">
-                  {loanEmi.errors.amount}
+                  {loanEmi.errors.rate}
                 </small>
               )}
             </div>
@@ -210,15 +268,17 @@ export default function EmiCalculator() {
               <input
                 type="number"
                 className="form-control"
+                name="months"
                 value={loanEmi.months}
-                onChange={(e) =>
-                  setLoanEmi({ ...loanEmi, months: parseInt(e.target.value) })
-                }
+                // onChange={(e) =>
+                //   setLoanEmi({ ...loanEmi, months: parseInt(e.target.value) })
+                // }
+                onChange={handleChange}
                 id="exampleInputPassword1"
               />
-              {loanEmi && loanEmi.errors?.amount !== "" && (
+              {loanEmi && loanEmi.errors?.months !== "" && (
                 <small className="text-danger my-2">
-                  {loanEmi.errors.amount}
+                  {loanEmi.errors.months}
                 </small>
               )}
             </div>
