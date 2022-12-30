@@ -27,9 +27,26 @@ export default function EmiCalculator() {
   const [userEmiHistory, setUserEmiHistory] = useState([]);
   const [message, setMessage] = useState({ status: false, msg: "" });
   const [confirmBox, setConfirmBox] = useState(false);
-  const token = localStorage.getItem("token");
+  const token = document.cookie.split("=")[1];
   const userId = jwt_deode(token);
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+   if(token){
+    LoanServices.getEmiDetails(userId.user._id, token)
+    .then((res) => {
+      if (res.data.success) {
+        setUserEmiHistory(res.data.msg.emiHistory);
+      }
+    })
+    .catch((ex) => {
+      navigate("/");
+    });
+   }else{
+    navigate("/");
+   }
+  },[])
 
   const finalEmiCount = (ruppes, interest, months) => {
     const amount = ruppes;
@@ -144,7 +161,7 @@ export default function EmiCalculator() {
             setUserEmiHistory(res.data.msg.emiHistory);
           }
         })
-        .catch((ex) => console.log(ex));
+        .catch((ex) => navigate("/"));
     } else {
       navigate("/");
     }
@@ -189,7 +206,7 @@ export default function EmiCalculator() {
             setUserEmiHistory(res.data.msg.emiHistory);
           }
         })
-        .catch((ex) => console.log(ex));
+        .catch((ex) => navigate("/"));
     } else {
       setConfirmBox(true);
       setMessage({ status: false, msg: "please resolve your active error" });

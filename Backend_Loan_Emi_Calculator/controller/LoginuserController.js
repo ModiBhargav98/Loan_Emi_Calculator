@@ -8,7 +8,7 @@ exports.loginUser = catchAsyncError(async (req, res, next) => {
   const user = await UserDb.findOne({ email: email, password: password });
   let token1 = jwt.sign({ user }, config.secretKey, {
     algorithm: config.algorithm,
-    expiresIn: "24h",
+    expiresIn: "10s",
   });
   if (!user) {
     return res.status(200).json({

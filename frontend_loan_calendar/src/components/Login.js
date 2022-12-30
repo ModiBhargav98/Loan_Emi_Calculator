@@ -93,14 +93,15 @@ export default function Login() {
           .then((res) => {
             if (res.data.success) {
               navigate("/emicalculator");
-              localStorage.setItem("token", res.data.token);
+              // localStorage.setItem("token", res.data.token);
+              document.cookie=`token=${res.data.token}`
             } else {
               setMessage({ status: false, msg: res.data.msg });
               setConfirmBox(true);
               setTimeout(() => setConfirmBox(false), 5000);
             }
           })
-          .catch((ex) => console.log(ex));
+          .catch((ex) => navigate("/"));
       }
     }else{
       if (verifyDetails(userDetail)) {
@@ -116,7 +117,7 @@ export default function Login() {
               setTimeout(() => setConfirmBox(false), 5000);
             }
           })
-          .catch((ex) => console.log(ex));
+          .catch((ex) => navigate("/"));
       }
     }
     
