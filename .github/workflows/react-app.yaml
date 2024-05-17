@@ -43,6 +43,7 @@ jobs:
         uses: actions/deploy-pages@v1  # Verified Marketplace action for GitHub Pages deployment
         with:
           token: ${{ secrets.PAGES_TOKEN }}
+          branch: main
           artifact_name: github-pages
           preview: false
 
