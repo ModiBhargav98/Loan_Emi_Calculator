@@ -46,6 +46,7 @@ export default function EmiCalculator() {
    }else{
     navigate("/");
    }
+  // eslint-disable-next-line
   },[])
 
   const finalEmiCount = (ruppes, interest, months) => {
@@ -151,8 +152,10 @@ export default function EmiCalculator() {
         )}
       </>
     );
+  // eslint-disable-next-line
   }, [userEmiHistory]);
 
+  // eslint-disable-next-line  
   useEffect(() => {
     if (token) {
       LoanServices.getEmiDetails(userId.user._id, token)
@@ -165,6 +168,7 @@ export default function EmiCalculator() {
     } else {
       navigate("/");
     }
+  // eslint-disable-next-line
   }, [confirmation]);
 
   const formValidation = (emiData) => {
