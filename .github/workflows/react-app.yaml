@@ -42,7 +42,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1  # Verified Marketplace action for GitHub Pages deployment
         with:
-          token: ${{ secrets.Token }}
+          token: ${{ secrets.PAGES_TOKEN }}
           source: cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar
           branch: main
           artifact_name: github-pages
