@@ -24,7 +24,7 @@ jobs:
         run : pwd
 
       - name: Set working directory
-        run:  cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator && ls
+        run:  cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -35,7 +35,7 @@ jobs:
         run: npm install
 
       - name: Build Project
-        working-directory: cd ../Loan_Emi_Calculator/frontend_loan_calendar
+        working-directory: cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar
         run: npm run build
         env:
           REACT_APP_WELCOME_TEXT: ${{ vars.REACT_APP_WELCOME_TEXT }}
@@ -43,7 +43,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1  # Verified Marketplace action for GitHub Pages deployment
         with:
-          source: ../Loan_Emi_Calculator/frontend_loan_calendar/build
+          source: cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar
           branch: main
 
    
