@@ -41,7 +41,7 @@ jobs:
           
       - name: Deploy to GitHub Pages
         run: |
-            cd frontend_loan_calendar/dist
+            cd frontend_loan_calendar
             git init
             git config user.name 'github-actions[bot]'
             git config user.email 'github-actions[bot]@users.noreply.github.com'
