@@ -20,6 +20,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set working directory
+        run: cd Loan_Emi_Calculator/frontend_loan_calendar
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
