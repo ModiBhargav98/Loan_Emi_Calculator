@@ -33,5 +33,11 @@ jobs:
         run: npm run build
         env:
           REACT_APP_WELCOME_TEXT: ${{ vars.REACT_APP_WELCOME_TEXT }}
+          
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1  # Verified Marketplace action for GitHub Pages deployment
+        with:
+          source: ./Loan_Emi_Calculator/frontend_loan_calendar/build
+          branch: main
 
    
