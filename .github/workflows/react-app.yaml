@@ -40,7 +40,7 @@ jobs:
           REACT_APP_WELCOME_TEXT: ${{ vars.REACT_APP_WELCOME_TEXT }}
           
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1  # Verified Marketplace action for GitHub Pages deployment
+        uses: peaceiris/actions-gh-pages@v3  # Verified Marketplace action for GitHub Pages deployment
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           branch: main
