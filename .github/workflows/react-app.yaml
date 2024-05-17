@@ -24,7 +24,7 @@ jobs:
         run : pwd
 
       - name: Set working directory
-        run:  cd /home/runner/work/Loan_Emi_Calculator/frontend_loan_calendar
+        run:  cd /home/runner/work/Loan_Emi_Calculator && ls
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
