@@ -2,7 +2,8 @@ name: CI/CD for React App
 
 on:
   push:
-    branches: [main]
+    branches: 
+      - main
   workflow_dispatch:
 
 permissions:
@@ -12,42 +13,31 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        version: [18.x]
-
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: check path
-        run : pwd
-
-      - name: Set working directory
-        run:  cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar && ls
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/checkout@v2
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.version }}
-
+          node-version: 18.x
+      
       - name: Install dependencies
-        run:  cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar && npm install
-
+        run: |
+          cd frontend_loan_calendar
+          npm install
+      
       - name: Build Project
-        run:  cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar && npm run build
-        env:
-          REACT_APP_WELCOME_TEXT: ${{ vars.REACT_APP_WELCOME_TEXT }}
+        run: |
+          cd frontend_loan_calendar
+          npm run build
           
       - name: Deploy to GitHub Pages
         run: |
-            cd frontend_loan_calendar
-            git init
-            npm run build
-            git config user.name 'github-actions[bot]'
-            git config user.email 'github-actions[bot]@users.noreply.github.com'
-            git add .
-            git commit -m 'Deploy to GitHub Pages'
-            git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
-
-   
+          cd frontend_loan_calendar
+          git init
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m 'Deploy to GitHub Pages'
+          git push --force "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
