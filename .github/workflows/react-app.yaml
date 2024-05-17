@@ -34,7 +34,7 @@ jobs:
           
       - name: Deploy frontend to gh-pages branch
         run: |
-          cd frontend_loan_calendar/build
+          cd frontend_loan_calendar
           git init
           git config user.name 'GitHub Actions'
           git config user.email 'actions@github.com'
