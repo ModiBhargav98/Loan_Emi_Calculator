@@ -29,6 +29,7 @@ jobs:
         run: npm install
 
       - name: Build Project
+        working-directory: Loan_Emi_Calculator/frontend_loan_calendar
         run: npm run build
         env:
           REACT_APP_WELCOME_TEXT: ${{ vars.REACT_APP_WELCOME_TEXT }}
@@ -36,5 +37,5 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.0
         with:
-          branch: gh-pages
-          folder: build
+          branch: main
+          folder: Loan_Emi_Calculator/frontend_loan_calendar/build
