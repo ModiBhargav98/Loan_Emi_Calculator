@@ -36,7 +36,7 @@ jobs:
 
       - name: Build Project
         working-directory: cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar
-        run: npm run build
+        run: cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar && npm run build
         env:
           REACT_APP_WELCOME_TEXT: ${{ vars.REACT_APP_WELCOME_TEXT }}
           
