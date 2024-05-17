@@ -32,7 +32,7 @@ jobs:
           node-version: ${{ matrix.version }}
 
       - name: Install dependencies
-        run: ls && npm install
+        run: cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar && npm install
 
       - name: Build Project
         working-directory: cd /home/runner/work/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar
