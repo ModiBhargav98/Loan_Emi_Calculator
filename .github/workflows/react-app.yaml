@@ -26,6 +26,11 @@ jobs:
         run: |
           cd frontend_loan_calendar
           npm install
+
+      - name: Install gh-pages
+        run:  |
+              cd frontend_loan_calendar
+              npm install gh-pages --save-dev
       
       - name: Build Project
         run: |
