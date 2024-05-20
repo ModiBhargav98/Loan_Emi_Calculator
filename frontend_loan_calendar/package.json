@@ -2,7 +2,7 @@
   "name": "frontend_loan_calendar",
   "version": "0.1.0",
   "private": true,
-  "homepage":"https://github.com/ModiBhargav98/Loan_Emi_Calculator/Loan_Emi_Calculator/frontend_loan_calendar",
+  "homepage":"https://github.com/ModiBhargav98/Loan_Emi_Calculator",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
