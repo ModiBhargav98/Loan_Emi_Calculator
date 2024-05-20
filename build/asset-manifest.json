@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ModiBhargav98/Loan_Emi_Calculator/static/css/main.027f1cfb.css",
+    "main.js": "/ModiBhargav98/Loan_Emi_Calculator/static/js/main.1db66159.js",
+    "static/js/787.4e07f27d.chunk.js": "/ModiBhargav98/Loan_Emi_Calculator/static/js/787.4e07f27d.chunk.js",
+    "index.html": "/ModiBhargav98/Loan_Emi_Calculator/index.html",
+    "main.027f1cfb.css.map": "/ModiBhargav98/Loan_Emi_Calculator/static/css/main.027f1cfb.css.map",
+    "main.1db66159.js.map": "/ModiBhargav98/Loan_Emi_Calculator/static/js/main.1db66159.js.map",
+    "787.4e07f27d.chunk.js.map": "/ModiBhargav98/Loan_Emi_Calculator/static/js/787.4e07f27d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.027f1cfb.css",
+    "static/js/main.1db66159.js"
+  ]
+}
